@@ -1,0 +1,39 @@
+@page "/my-page"
+@inject IJSRuntime JSRuntime
+
+<h1>My Page</h1>
+    <p class="my-paragraph @(this.LoggedInUser == "Juanjo"? "enabled" : string.Empty)">This is my parragraph</p>
+<MyComponent UserName="@LoggedInUser" />
+<h2>Binding</h2>
+<button class="btn btn-primary" @onclick=MyAction>Run!</button>
+<Counter OnIncremented=ValueIncrement ></Counter>
+
+<h2>input</h2>
+<div class="form-group">
+    <label for="">Email</label>
+    <input type="email"  @bind-value=Form.Email @bind-value:event="oninput">
+    <div class="text-muted">Your email is @Form.Email</div>
+
+    <button class="btn btn-primary" @onclick=Form.Save @onclick:preventDefault>Run!</button>
+</div>
+
+@code {
+    public string LoggedInUser { get; set; } = "Mauro";
+
+    private void MyAction() {
+        this.LoggedInUser =  this.LoggedInUser == "Mauro" ? "Juanjo" : "Mauro";
+    }
+
+    public RegisterForm Form { get; set; } = new RegisterForm();
+
+
+    private void ValueIncrement(int value) {
+        this.LoggedInUser = value.ToString();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        @* await JSRuntime.InvokeVoidAsync("console.log", new string[] { "This is my Page" }); *@
+    }
+    
+}
